@@ -71,7 +71,7 @@ export default class Users extends Component {
 
     renderLoadMore() {
         const {totalPages, start, loading} = this.state;
-        if (true) {
+        if (loading) {
             return (
                 <div className='loading'>
                     <img src='images/spinner.gif'/>

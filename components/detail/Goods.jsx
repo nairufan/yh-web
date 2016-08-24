@@ -28,6 +28,7 @@ export default class Goods extends Component {
         if (userId) {
             url += `&userId=${userId}`;
         }
+        this.setState({loading: true});
         fetch(url)
             .then((res)=> {
                 const reList = res.goodsList;
@@ -37,9 +38,13 @@ export default class Goods extends Component {
                     categoryMap: res.categoryMap,
                     totalPages: res.totalPages,
                     start: start + 1,
+                    loading: false,
                 });
             }).catch((err)=> {
                 console.log(err);
+                this.setState({
+                    loading: false,
+                });
             });
     }
 
@@ -57,7 +62,14 @@ export default class Goods extends Component {
     }
 
     renderLoadMore() {
-        const {totalPages, start} = this.state;
+        const {totalPages, start, loading} = this.state;
+        if (loading) {
+            return (
+                <div className='loading'>
+                    <img src='images/spinner.gif'/>
+                </div>
+            );
+        }
         if (totalPages > start) {
             return (
                 <div className='load-more' onClick={() => this.getCategoryList()}>加载更多</div>

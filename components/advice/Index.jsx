@@ -30,6 +30,7 @@ export default class Index extends Component {
     getAdviceList() {
         const {start, size, list=[], userMap={}, tab} = this.state;
         let url = `/advice/list?start=${start}&size=${size}&status=${tab}`;
+        this.setState({loading: true});
         fetch(url)
             .then((res)=> {
                 const reList = res.list;
@@ -41,9 +42,13 @@ export default class Index extends Component {
                     userMap: newUserMap,
                     totalPages: res.totalPages,
                     start: start + 1,
+                    loading: false,
                 });
             }).catch((err)=> {
                 console.log(err);
+                this.setState({
+                    loading: false,
+                });
             });
     }
 
@@ -121,7 +126,14 @@ export default class Index extends Component {
     }
 
     renderLoadMore() {
-        const {totalPages, start} = this.state;
+        const {totalPages, start, loading} = this.state;
+        if (loading) {
+            return (
+                <div className='loading'>
+                    <img src='images/spinner.gif'/>
+                </div>
+            );
+        }
         if (totalPages > start) {
             return (
                 <div className='load-more' onClick={() => this.getAdviceList()}>加载更多</div>
