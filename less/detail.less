@@ -1,0 +1,49 @@
+//setting
+@import "./global";
+//components
+@import "./components/header";
+@import "./components/order";
+@import "./components/category";
+@import "./components/goods";
+@import "./components/customer";
+
+.detail {
+  display: flex;
+  flex: 0 0 auto;
+  .nav-bar {
+    display: flex;
+    flex: 0 0 60px;
+    margin-right: 50px;
+    border-right: solid 1px #f4f4f4;
+    margin-top: 50px;
+
+    ul {
+      display: flex;
+      flex: 0 0 auto;
+      flex-direction: column;
+      li {
+        position: relative;
+        padding: 10px 10px;
+        color: #777;
+        cursor: pointer;
+      }
+      .active{
+        font-weight: bold;
+        &:after{
+          content: '';
+          position: absolute;
+          height: 22px;
+          width: 4px;
+          background-color: #d8d8d8;
+          left: -10px;
+          top: 50%;
+          margin-top: -11px;
+        }
+      }
+    }
+  }
+  .content {
+    margin-top: 30px;
+    width: 100%;
+  }
+}

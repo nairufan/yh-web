@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
+import '../../less/main.less';
 
-class Admin extends Component {
+export default class Index extends Component {
     render() {
         return (
         <div>
@@ -8,6 +9,3 @@ class Admin extends Component {
         )
     }
 }
-
-export default Admin
-

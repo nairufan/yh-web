@@ -1,8 +1,9 @@
 /build
 /node_modules
-### Node ###
 node_modules
 npm-debug.log*
 /node_modules
-### build ###
 build
+.idea/
+static/build/
+.gitignore

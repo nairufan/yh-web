@@ -1,0 +1,21 @@
+.users {
+    width: 100%;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    .actions{
+        display: flex;
+        flex: 0 0 auto;
+        align-items: center;
+        a{
+            cursor: pointer;
+            text-decoration: none;
+            &:hover{
+                text-decoration: underline;
+            }
+            &:last-child{
+                margin-left: 15px;
+            }
+        }
+    }
+}

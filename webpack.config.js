@@ -1,25 +1,31 @@
 var path = require("path");
 var webpack = require('webpack');
 var node_modules_dir = path.resolve(__dirname, 'node_modules');
-
-// process.env.NODE_ENV  product or dev
+var IconFontPlugin = require("iconfont-loader/IconFontPlugin");
+var reactIconTemplate = encodeURIComponent(`
+module.exports = require("react").createElement("span", {
+    className: "icon",
+}, __ICON__.text);
+`);
 
 var config = {
     devtool:false,
     entry: {
-        admin : path.resolve(__dirname, 'containers/Admin'),
-        all: './index',
+        home: './entry/home',
+        login: './entry/login',
+        detail: './entry/detail',
+        advice: './entry/advice',
     },
     output: {
-        path: path.resolve(__dirname, 'build/'),
-        filename: "[name].js"
-        ,publicPath: "/build/"
+        path: path.resolve(__dirname, 'static/build/'),
+        filename: "[name].js",
+        publicPath: "/static/build/"
     },
 
     module: {
         loaders: [
             {
-                test: /\.js?$/,
+                test: /\.(js|jsx)$/,
                 loader: 'babel-loader',
                 exclude: [node_modules_dir]
             },{
@@ -32,6 +38,10 @@ var config = {
             }, {
                   test: /\.less/,
                   loader: 'style-loader!css-loader!less-loader'
+            },
+            {
+                test: /\.svg$/,
+                loader: 'iconfont-loader?template=' + reactIconTemplate,
             },
         ]
     },
@@ -49,6 +59,14 @@ var config = {
             }
         }),
         new webpack.optimize.CommonsChunkPlugin('common.js'),
+        new IconFontPlugin({
+            fontName: "icon-fonts",
+        }),
+        new webpack.DefinePlugin({
+            "process.env": {
+                NODE_ENV: JSON.stringify("production")
+            }
+        }),
     ]
 };
 module.exports = config;
