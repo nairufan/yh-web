@@ -51,7 +51,7 @@ export default class Goods extends Component {
     renderTableBody() {
         const {goodsList, categoryMap} = this.state;
         return goodsList.map(({id, memo, create_time, product_name, category_id}) => (
-            <tr key={id} onClick={() => this.onOrderClick(id)}>
+            <tr key={id}>
                 <td className='item'>{id}</td>
                 <td className='item'>{product_name}</td>
                 <td className='item'>{memo}</td>

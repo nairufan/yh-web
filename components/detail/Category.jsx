@@ -49,7 +49,7 @@ export default class Category extends Component {
     renderTableBody() {
         const {categoryList} = this.state;
         return categoryList.map(({id, memo, create_time, name}) => (
-            <tr key={id} onClick={() => this.onOrderClick(id)}>
+            <tr key={id}>
                 <td className='item'>{id}</td>
                 <td className='item'>{name}</td>
                 <td className='item'>{memo}</td>

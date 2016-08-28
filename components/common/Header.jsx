@@ -46,4 +46,4 @@ export default class Header extends Component {
     }
 }
 
-const mockUser = {username: 'Fannairu', avatar: 'https://dzamqefpotdvf.cloudfront.net/07df92ac-ea32-4fc7-819d-b06cc9c211c6'};
+const mockUser = {username: 'Admin'};

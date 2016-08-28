@@ -58,7 +58,7 @@ export default class Detail extends Component {
                 <td className='item'>{customer_name}</td>
                 <td className='item'>{customer_tel}</td>
                 <td className='item'>{customer_address}</td>
-                <td className='item'>{status}</td>
+                <td className='item'>{status === 1 ? '已发货' : '未发货'}</td>
                 <td className='item'>{memo}</td>
                 <td className='item'>{moment(create_time).format('YYYY-MM-DD hh:mm')}</td>
             </tr>

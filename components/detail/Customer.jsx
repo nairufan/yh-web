@@ -49,7 +49,7 @@ export default class Customer extends Component {
     renderTableBody() {
         const {customerList} = this.state;
         return customerList.map(({id, memo, create_time, customer_name, customer_address, customer_tel}) => (
-            <tr key={id} onClick={() => this.onOrderClick(id)}>
+            <tr key={id}>
                 <td className='item'>{id}</td>
                 <td className='item'>{customer_name}</td>
                 <td className='item'>{customer_tel}</td>
