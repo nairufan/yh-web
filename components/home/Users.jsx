@@ -32,7 +32,8 @@ export default class Users extends Component {
         const {start, size, list =[]} = this.state;
         this.setState({loading: true});
         fetch(`/user/list?start=${start}&size=${size}`)
-            .then((res)=>{
+            .then((res)=> {
+                console.log(res);
                 const reList = res.list;
                 const newList = [...list, ...reList];
                 this.setState({
@@ -41,12 +42,64 @@ export default class Users extends Component {
                     start: start + 1,
                     loading: false,
                 });
-            }).catch((err)=>{
+            }).catch((err)=> {
                 console.log(err);
                 this.setState({
                     loading: false,
                 });
             });
+    }
+
+    searchByPhone() {
+        const {phone} = this.state;
+        if (!phone) {
+            return;
+        }
+        this.setState({loading: true});
+        fetch(`/user/${phone}`)
+            .then((res)=> {
+                const user = res.Result;
+                const newList = [];
+                if (!!user) {
+                    newList.push(user);
+                }
+                this.setState({
+                    list: newList,
+                    totalPages: 0,
+                    start: 0,
+                    loading: false,
+                });
+            }).catch((err)=> {
+                console.log(err);
+                this.setState({
+                    loading: false,
+                });
+            });
+    }
+
+    onKeyPress(e) {
+        const keyCode = e.keyCode || e.which;
+        if (keyCode === 13) {
+            this.searchByPhone();
+        }
+    }
+
+    renderSearch() {
+        return (
+            <div className='search-wrapper'>
+                <div className='input-group'>
+                    <input type='text' className='form-control' placeholder='请输入手机号码'
+                           value={this.state.phone}
+                           onKeyPress={(e) => this.onKeyPress(e)}
+                           onChange={(e) => this.setState({phone: e.target.value})}/>
+                    <span className='input-group-btn'>
+                        <button className='btn btn-default' type='button'
+                                onClick={() => this.searchByPhone()}>Search
+                        </button>
+                    </span>
+                </div>
+            </div>
+        );
     }
 
     renderTableBody() {
@@ -91,6 +144,7 @@ export default class Users extends Component {
     render() {
         return (
             <div className='users'>
+                {this.renderSearch()}
                 <table className='table table-hover'>
                     <thead>
                     <tr>

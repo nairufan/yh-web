@@ -15,6 +15,7 @@ var config = {
         login: './entry/login',
         detail: './entry/detail',
         advice: './entry/advice',
+        express: './entry/express',
     },
     output: {
         path: path.resolve(__dirname, 'static/build/'),
