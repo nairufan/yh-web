@@ -4,7 +4,7 @@ import Avatar from './Avatar';
 const menus = [
     {title: '用户', link: '/index.html'},
     {title: '详细', link: '/detail.html'},
-    //{title: '统计', link: '/static.html'},
+    {title: '统计', link: '/statistic.html'},
     {title: '反馈', link: '/advice.html'},
 ];
 export default class Header extends Component {

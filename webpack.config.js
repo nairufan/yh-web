@@ -2,11 +2,6 @@ var path = require("path");
 var webpack = require('webpack');
 var node_modules_dir = path.resolve(__dirname, 'node_modules');
 var IconFontPlugin = require("iconfont-loader/IconFontPlugin");
-var reactIconTemplate = encodeURIComponent(`
-module.exports = require("react").createElement("span", {
-    className: "icon",
-}, __ICON__.text);
-`);
 
 var config = {
     devtool:false,
@@ -16,6 +11,7 @@ var config = {
         detail: './entry/detail',
         advice: './entry/advice',
         express: './entry/express',
+        statistic: './entry/statistic',
     },
     output: {
         path: path.resolve(__dirname, 'static/build/'),
@@ -39,10 +35,6 @@ var config = {
             }, {
                   test: /\.less/,
                   loader: 'style-loader!css-loader!less-loader'
-            },
-            {
-                test: /\.svg$/,
-                loader: 'iconfont-loader?template=' + reactIconTemplate,
             },
         ]
     },
