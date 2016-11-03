@@ -21,6 +21,7 @@
     "babel-loader": "^5.3.2",
     "bootstrap": "^3.3.6",
     "constance": "^1.0.0",
+    "d3": "^4.3.0",
     "gulp": "^3.9.0",
     "gulp-clean": "^0.3.1",
     "gulp-connect": "^2.2.0",
@@ -33,7 +34,6 @@
     "react-addons-update": "^15.3.2",
     "react-bootstrap": "^0.30.0",
     "react-dom": "^15.2.1",
-    "react-google-charts": "^1.2.1",
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
     "webpack": "^1.12.9"

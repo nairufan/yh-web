@@ -115,9 +115,9 @@ export default class Index extends Component {
 
     renderTableBody() {
         const {list, userMap} = this.state;
-        return list.map(({id, userId, content, create_time, status}) => (
+        return list.map(({id, user_id_str, content, create_time, status}) => (
             <tr key={id}>
-                <td className='item'>{userMap[userId] && userMap[userId].tel}</td>
+                <td className='item'>{userMap[user_id_str] && userMap[user_id_str].tel}</td>
                 <td className='item'>{content}</td>
                 <td className='item'>{moment(create_time).format('YYYY-MM-DD hh:mm')}</td>
                 <td className='item'>{this.renderStatus(id, status)}</td>
