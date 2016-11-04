@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import Avatar from './../common/Avatar';
 import {fetch} from '../../utils/fetch';
 import moment from 'moment';
-import Chart from 'src/chart.js'
+import Chart from 'chart.js/src/chart.js'
 const dayMillionSeconds = 24 * 60 * 60 * 1000;
 export default class Users extends Component {
 
@@ -26,7 +26,37 @@ export default class Users extends Component {
     }
 
     renderChart(data) {
-
+        var ctx = document.getElementById("userChart");
+        var userChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                datasets: [
+                    {
+                        label: "My First dataset",
+                        fill: false,
+                        lineTension: 0.1,
+                        backgroundColor: "rgba(75,192,192,0.4)",
+                        borderColor: "rgba(75,192,192,1)",
+                        borderCapStyle: 'butt',
+                        borderDash: [],
+                        borderDashOffset: 0.0,
+                        borderJoinStyle: 'miter',
+                        pointBorderColor: "rgba(75,192,192,1)",
+                        pointBackgroundColor: "#fff",
+                        pointBorderWidth: 1,
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointHoverBorderWidth: 2,
+                        pointRadius: 1,
+                        pointHitRadius: 10,
+                        data: [65, 59, 80, 81, 56, 55, 40],
+                        spanGaps: false,
+                    }
+                ]
+            },
+        });
     }
     getStatistics() {
         const endDate = new Date().getTime();
@@ -68,7 +98,7 @@ export default class Users extends Component {
         return (
             <div className='user-statistic'>
                 <div className='total'>总用户数：{total || 0}</div>
-                <canvas id='myChart' width='400" height="400"></canvas>
+                <canvas id='userChart' width='400" height="400"></canvas>
             </div>
         )
     }
