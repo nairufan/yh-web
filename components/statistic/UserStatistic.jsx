@@ -3,7 +3,9 @@ import Avatar from './../common/Avatar';
 import {fetch} from '../../utils/fetch';
 import moment from 'moment';
 import Chart from 'chart.js/src/chart.js'
+
 const dayMillionSeconds = 24 * 60 * 60 * 1000;
+
 export default class Users extends Component {
 
     constructor() {
@@ -27,13 +29,19 @@ export default class Users extends Component {
 
     renderChart(data) {
         var ctx = document.getElementById("userChart");
+        const labels = [];
+        const dataSet = [];
+        data.forEach(({date, count}) => {
+            labels.push(date);
+            dataSet.push(count);
+        });
         var userChart = new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
             data: {
-                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                labels: labels,
                 datasets: [
                     {
-                        label: "My First dataset",
+                        label: "新增用户",
                         fill: false,
                         lineTension: 0.1,
                         backgroundColor: "rgba(75,192,192,0.4)",
@@ -58,6 +66,7 @@ export default class Users extends Component {
             },
         });
     }
+
     getStatistics() {
         const endDate = new Date().getTime();
         const startDate = endDate - 10 * dayMillionSeconds;
@@ -98,7 +107,7 @@ export default class Users extends Component {
         return (
             <div className='user-statistic'>
                 <div className='total'>总用户数：{total || 0}</div>
-                <canvas id='userChart' width='400" height="400"></canvas>
+                <canvas id='userChart' width='400' height='400'></canvas>
             </div>
         )
     }
