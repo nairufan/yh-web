@@ -6,7 +6,7 @@ import Chart from 'chart.js/src/chart.js'
 
 const dayMillionSeconds = 24 * 60 * 60 * 1000;
 
-export default class Users extends Component {
+export default class OrderStatistic extends Component {
 
     constructor() {
         super();
@@ -27,7 +27,7 @@ export default class Users extends Component {
     }
 
     renderChart(data) {
-        var ctx = document.getElementById("userChart");
+        var ctx = document.getElementById("orderChart");
         const labels = [];
         const dataSet = [];
         data.forEach(({date, count}) => {
@@ -40,7 +40,7 @@ export default class Users extends Component {
                 labels: labels,
                 datasets: [
                     {
-                        label: "新增用户",
+                        label: "新增订单",
                         fill: false,
                         lineTension: 0.1,
                         backgroundColor: "rgba(75,192,192,0.4)",
@@ -77,7 +77,7 @@ export default class Users extends Component {
             });
             tmpDate += dayMillionSeconds;
         }
-        let url = `/user/statistics?start=${startDate}&end=${endDate}`;
+        let url = `/order/statistics?start=${startDate}&end=${endDate}`;
         this.setState({loading: true});
         fetch(url)
             .then((res)=> {
@@ -104,9 +104,9 @@ export default class Users extends Component {
         const {total} = this.state;
         return (
             <div className='user-statistic'>
-                <div className='total'>用户总数：{total || 0}</div>
+                <div className='total'>订单总数：{total || 0}</div>
                 <div className='canvas-wrapper'>
-                    <canvas id='userChart' style={{width: 600, height: 400}}></canvas>
+                    <canvas id='orderChart' style={{width: 600, height: 400}}></canvas>
                 </div>
             </div>
         )

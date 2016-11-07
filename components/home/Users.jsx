@@ -115,7 +115,7 @@ export default class Users extends Component {
                 <td className='item'>
                     <div className='actions'>
                         <a href={`/detail.html?userId=${id}`}>详细</a>
-                        <a href={`/detail.html?userId=${id}`}>统计</a>
+                        <a href={'/statistic.html'}>统计</a>
                     </div>
                 </td>
             </tr>
