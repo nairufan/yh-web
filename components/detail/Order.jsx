@@ -8,12 +8,6 @@ export default class Detail extends Component {
 
     constructor() {
         super();
-        this.state = {
-            start: 0,
-            size: 10,
-            totalPages: 0,
-            orderList: [],
-        }
     }
 
     componentDidMount() {
@@ -21,29 +15,9 @@ export default class Detail extends Component {
     }
 
     getOrderList() {
-        const {start, size, orderList=[]} = this.state;
-        const {userId} = this.props;
-        let url = `/order/list?start=${start}&size=${size}`;
-        if (userId) {
-            url += `&userId=${userId}`;
-        }
-        this.setState({loading: true});
-        fetch(url)
-            .then((res)=> {
-                const reList = res.orderList;
-                const newList = [...orderList, ...reList];
-                this.setState({
-                    orderList: newList,
-                    totalPages: res.totalPages,
-                    start: start + 1,
-                    loading: false,
-                });
-            }).catch((err)=> {
-                console.log(err);
-                this.setState({
-                    loading: false,
-                });
-            });
+        const {userId, getOrderList, detail} = this.props;
+        const {start, size} = detail || {};
+        getOrderList(start, size, userId);
     }
 
     onOrderClick(id) {
@@ -51,7 +25,8 @@ export default class Detail extends Component {
     }
 
     renderTableBody() {
-        const {orderList} = this.state;
+        const {detail} = this.props;
+        const {list: orderList} = detail || {};
         return orderList.map(({id, memo, create_time, customer_id, customer_name, customer_tel, customer_address, status}) => (
             <tr key={id} onClick={() => this.onOrderClick(id)}>
                 <td className='item'>{id}</td>
@@ -66,7 +41,8 @@ export default class Detail extends Component {
     }
 
     renderLoadMore() {
-        const {totalPages, start, loading} = this.state;
+        const {detail} = this.props;
+        const {totalPages, start, loading} = detail || {};
         if (loading) {
             return (
                 <div className='loading'>

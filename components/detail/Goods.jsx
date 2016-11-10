@@ -8,48 +8,21 @@ export default class Goods extends Component {
 
     constructor() {
         super();
-        this.state = {
-            start: 0,
-            size: 10,
-            totalPages: 0,
-            goodsList: [],
-            categoryMap: {},
-        }
     }
 
     componentDidMount() {
-        this.getCategoryList();
+        this.getGoodsList();
     }
 
-    getCategoryList() {
-        const {start, size, goodsList=[]} = this.state;
-        const {userId} = this.props;
-        let url = `/goods/list?start=${start}&size=${size}`;
-        if (userId) {
-            url += `&userId=${userId}`;
-        }
-        this.setState({loading: true});
-        fetch(url)
-            .then((res)=> {
-                const reList = res.goodsList;
-                const newList = [...goodsList, ...reList];
-                this.setState({
-                    goodsList: newList,
-                    categoryMap: res.categoryMap,
-                    totalPages: res.totalPages,
-                    start: start + 1,
-                    loading: false,
-                });
-            }).catch((err)=> {
-                console.log(err);
-                this.setState({
-                    loading: false,
-                });
-            });
+    getGoodsList() {
+        const {userId, getGoodsList, detail} = this.props;
+        const {start, size} = detail || {};
+        getGoodsList(start, size, userId);
     }
 
     renderTableBody() {
-        const {goodsList, categoryMap} = this.state;
+        const {detail} = this.props;
+        const {list: goodsList, categoryMap} = detail || {};
         return goodsList.map(({id, memo, create_time, product_name, category_id}) => (
             <tr key={id}>
                 <td className='item'>{id}</td>
@@ -62,7 +35,8 @@ export default class Goods extends Component {
     }
 
     renderLoadMore() {
-        const {totalPages, start, loading} = this.state;
+        const {detail} = this.props;
+        const {totalPages, start, loading} = detail || {};
         if (loading) {
             return (
                 <div className='loading'>
@@ -72,7 +46,7 @@ export default class Goods extends Component {
         }
         if (totalPages > start) {
             return (
-                <div className='load-more' onClick={() => this.getCategoryList()}>加载更多</div>
+                <div className='load-more' onClick={() => this.getGoodsList()}>加载更多</div>
             );
         }
         return (

@@ -2,8 +2,8 @@
  * Created by fannairu on 2016/8/14.
  */
 import React, { Component, PropTypes } from 'react';
-import {fetch} from '../../utils/fetch';
 import moment from 'moment';
+
 export default class Category extends Component {
 
     constructor() {
@@ -21,33 +21,14 @@ export default class Category extends Component {
     }
 
     getCategoryList() {
-        const {start, size, categoryList=[]} = this.state;
-        const {userId} = this.props;
-        let url = `/category/list?start=${start}&size=${size}`;
-        if (userId) {
-            url += `&userId=${userId}`;
-        }
-        this.setState({loading: true});
-        fetch(url)
-            .then((res)=> {
-                const reList = res.categoryList;
-                const newList = [...categoryList, ...reList];
-                this.setState({
-                    categoryList: newList,
-                    totalPages: res.totalPages,
-                    start: start + 1,
-                    loading: false,
-                });
-            }).catch((err)=> {
-                console.log(err);
-                this.setState({
-                    loading: false,
-                });
-            });
+        const {userId, getCategoryList, detail} = this.props;
+        const {start, size} = detail || {};
+        getCategoryList(start, size, userId);
     }
 
     renderTableBody() {
-        const {categoryList} = this.state;
+        const {detail} = this.props;
+        const {list: categoryList} = detail || {};
         return categoryList.map(({id, memo, create_time, name}) => (
             <tr key={id}>
                 <td className='item'>{id}</td>
@@ -59,7 +40,8 @@ export default class Category extends Component {
     }
 
     renderLoadMore() {
-        const {totalPages, start, loading} = this.state;
+        const {detail} = this.props;
+        const {totalPages, start, loading} = detail || {};
         if (loading) {
             return (
                 <div className='loading'>

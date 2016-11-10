@@ -9,19 +9,8 @@ export default class Users extends Component {
     constructor() {
         super();
         this.state = {
-            start: 0,
-            size: 10,
-            itemsShow: {},
-            "totalPages": 0,
-            "list": [],
+            phone: '',
         }
-    }
-
-    toggleItemsShow(id, show) {
-        const {itemsShow} = this.state;
-        const newItemsShow = {...itemsShow};
-        newItemsShow[id] = show;
-        this.setState({itemsShow: newItemsShow});
     }
 
     componentDidMount() {
@@ -29,25 +18,9 @@ export default class Users extends Component {
     }
 
     getUserList() {
-        const {start, size, list =[]} = this.state;
-        this.setState({loading: true});
-        fetch(`/user/list?start=${start}&size=${size}`)
-            .then((res)=> {
-                console.log(res);
-                const reList = res.list;
-                const newList = [...list, ...reList];
-                this.setState({
-                    list: newList,
-                    totalPages: res.totalPages,
-                    start: start + 1,
-                    loading: false,
-                });
-            }).catch((err)=> {
-                console.log(err);
-                this.setState({
-                    loading: false,
-                });
-            });
+        const {getUserList, data} = this.props;
+        const {start, size} = data;
+        getUserList(start, size);
     }
 
     searchByPhone() {
@@ -55,26 +28,7 @@ export default class Users extends Component {
         if (!phone) {
             return;
         }
-        this.setState({loading: true});
-        fetch(`/user/${phone}`)
-            .then((res)=> {
-                const user = res.Result;
-                const newList = [];
-                if (!!user) {
-                    newList.push(user);
-                }
-                this.setState({
-                    list: newList,
-                    totalPages: 0,
-                    start: 0,
-                    loading: false,
-                });
-            }).catch((err)=> {
-                console.log(err);
-                this.setState({
-                    loading: false,
-                });
-            });
+        this.props.getUserByPhone(phone);
     }
 
     onKeyPress(e) {
@@ -103,7 +57,8 @@ export default class Users extends Component {
     }
 
     renderTableBody() {
-        const {list} = this.state;
+        const {data} = this.props;
+        const {list} = data;
         if (!list) {
             return null;
         }
@@ -123,7 +78,8 @@ export default class Users extends Component {
     }
 
     renderLoadMore() {
-        const {totalPages, start, loading} = this.state;
+        const {data} = this.props;
+        const {totalPages, start, loading} = data;
         if (loading) {
             return (
                 <div className='loading'>

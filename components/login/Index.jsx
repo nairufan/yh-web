@@ -1,44 +1,26 @@
 import React, { Component, PropTypes } from 'react';
 import {fetch} from '../../utils/fetch';
 import '../../less/login.less';
+import { connect } from 'react-redux';
+import { login, onError } from '../../actions/LoginAction';
 
-export default class Index extends Component {
+class Index extends Component {
     constructor() {
         super();
         this.state = {
             tel: '',
             password: '',
-            error: null,
         }
     }
 
     login() {
         const {tel, password} = this.state;
+        const {dispatch} = this.props;
         if (!tel || !password) {
-            this.setState({
-                error: 'telephone or password must not null.',
-            });
+            dispatch(onError('telephone or password must not null.'));
             return;
         }
-        this.setState({loading: true});
-        const data = {tel, password};
-        fetch('/user/loginWithPassword', JSON.stringify(data), 'POST')
-            .then((res)=> {
-                if (!res.ERROR_CODE) {
-                    window.location.href='/index.html';
-                }
-                this.setState({
-                    error: res.ERROR_CODE,
-                    loading: false,
-                });
-                console.log(res);
-            }).catch((err)=> {
-                console.log(err);
-                this.setState({
-                    loading: false,
-                    error: error,
-                });
-            });
+        dispatch(login(tel, password));
     }
 
     renderError(error) {
@@ -53,7 +35,9 @@ export default class Index extends Component {
     }
 
     render() {
-        const {tel, password, error, loading} = this.state;
+        const {login} = this.props;
+        const {tel, password} = this.state;
+        const {error, loading} = login || {};
         return (
             <div className='login'>
                 {error && this.renderError(error)}
@@ -77,9 +61,15 @@ export default class Index extends Component {
                     <button className='btn btn-primary'
                             type='button'
                             disabled={loading}
-                            onClick={() => this.login()}>Login</button>
+                            onClick={() => this.login()}>Login
+                    </button>
                 </form>
             </div>
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {login: state.login};
+}
+export default connect(mapStateToProps)(Index);

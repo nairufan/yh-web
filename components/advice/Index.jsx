@@ -4,6 +4,8 @@ import update from 'react-addons-update';
 import Header from '../common/Header';
 import {fetch} from '../../utils/fetch';
 import '../../less/advice.less';
+import { connect } from 'react-redux';
+import { getAdvice, changeTab , markResolve} from '../../actions/AdviceAction';
 
 const tabs = [
     {key: '-1', value: '所有'},
@@ -11,16 +13,9 @@ const tabs = [
     {key: '1', value: '已解决'},
 ];
 
-export default class Index extends Component {
+class Index extends Component {
     constructor() {
         super();
-        this.state = {
-            tab: tabs[0].key,
-            list: [],
-            userMap: {},
-            start: 0,
-            size: 10,
-        }
     }
 
     componentDidMount() {
@@ -28,67 +23,28 @@ export default class Index extends Component {
     }
 
     getAdviceList() {
-        const {start, size, list=[], userMap={}, tab} = this.state;
-        let url = `/advice/list?start=${start}&size=${size}&status=${tab}`;
-        this.setState({loading: true});
-        fetch(url)
-            .then((res)=> {
-                const reList = res.list;
-                const newList = [...list, ...reList];
-                const reUserMap = res.userMap;
-                const newUserMap = {...reUserMap, ...userMap};
-                this.setState({
-                    list: newList,
-                    userMap: newUserMap,
-                    totalPages: res.totalPages,
-                    start: start + 1,
-                    loading: false,
-                });
-            }).catch((err)=> {
-                console.log(err);
-                this.setState({
-                    loading: false,
-                });
-            });
+        const {advice, dispatch} = this.props;
+        const {start, size, tab} = advice || {};
+        dispatch(getAdvice(start, size, tab));
     }
 
     onResole(id) {
-        fetch(`/advice/resolve/${id}`, {}, 'POST')
-            .then((res)=>{
-                if (res.Result === 'SUCCESS') {
-                    const {list} = this.state;
-                    const index = list.findIndex(({id: itemId}) => id === itemId);
-                    if (index >= 0) {
-                        const newList = update(list,{
-                            [index]: {
-                                status: {
-                                    $set: 1,
-                                },
-                            },
-                        });
-                        this.setState({list: newList});
-                    }
-                }
-            }).catch((err)=>{
-                console.log(err);
-            });
+        const {dispatch} = this.props;
+        dispatch(markResolve(id));
     }
 
     onTabChange(status) {
-        const {tab} = this.state;
+        const {advice, dispatch} = this.props;
+        const {tab} = advice || {};
         if (status !== tab) {
-            this.setState({
-                tab: status,
-                list: [],
-                userMap: {},
-                start: 0,
-                size: 10,
-            }, () => this.getAdviceList());
+            dispatch(changeTab(status));
+            dispatch(getAdvice(0, 10, status));
         }
     }
 
     renderNav() {
-        const {tab} = this.state;
+        const {advice} = this.props;
+        const {tab} = advice || {};
         return (
             <ul>
                 {
@@ -114,7 +70,8 @@ export default class Index extends Component {
     }
 
     renderTableBody() {
-        const {list, userMap} = this.state;
+        const {advice} = this.props;
+        const {list, userMap} = advice || {};
         return list.map(({id, user_id_str, content, create_time, status}) => (
             <tr key={id}>
                 <td className='item'>{userMap[user_id_str] && userMap[user_id_str].tel}</td>
@@ -126,7 +83,8 @@ export default class Index extends Component {
     }
 
     renderLoadMore() {
-        const {totalPages, start, loading} = this.state;
+        const {advice} = this.props;
+        const {totalPages, start, loading} = advice || {};
         if (loading) {
             return (
                 <div className='loading'>
@@ -174,3 +132,8 @@ export default class Index extends Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {advice: state.advice};
+}
+export default connect(mapStateToProps)(Index);

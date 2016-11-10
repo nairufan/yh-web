@@ -2,18 +2,11 @@
  * Created by fannairu on 2016/8/14.
  */
 import React, { Component, PropTypes } from 'react';
-import {fetch} from '../../utils/fetch';
 import moment from 'moment';
 export default class Customer extends Component {
 
     constructor() {
         super();
-        this.state = {
-            start: 0,
-            size: 10,
-            totalPages: 0,
-            customerList: [],
-        }
     }
 
     componentDidMount() {
@@ -21,33 +14,14 @@ export default class Customer extends Component {
     }
 
     getCustomerList() {
-        const {start, size, customerList=[]} = this.state;
-        const {userId} = this.props;
-        let url = `/customer/list?start=${start}&size=${size}`;
-        if (userId) {
-            url += `&userId=${userId}`;
-        }
-        this.setState({loading: true});
-        fetch(url)
-            .then((res)=> {
-                const reList = res.customerList;
-                const newList = [...customerList, ...reList];
-                this.setState({
-                    customerList: newList,
-                    totalPages: res.totalPages,
-                    start: start + 1,
-                    loading: false,
-                });
-            }).catch((err)=> {
-                console.log(err);
-                this.setState({
-                    loading: false,
-                });
-            });
+        const {userId, getCustomerList, detail} = this.props;
+        const {start, size} = detail || {};
+        getCustomerList(start, size, userId);
     }
 
     renderTableBody() {
-        const {customerList} = this.state;
+        const {detail} = this.props;
+        const {list: customerList} = detail || {};
         return customerList.map(({id, memo, create_time, customer_name, customer_address, customer_tel}) => (
             <tr key={id}>
                 <td className='item'>{id}</td>
@@ -61,7 +35,8 @@ export default class Customer extends Component {
     }
 
     renderLoadMore() {
-        const {totalPages, start, loading} = this.state;
+        const {detail} = this.props;
+        const {totalPages, start, loading} = detail || {};
         if (loading) {
             return (
                 <div className='loading'>

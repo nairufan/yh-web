@@ -2,27 +2,34 @@
  * Created by nairu on 2016/10/25.
  */
 import {fetch} from '../utils/fetch';
+import {ON_ERROR, REQUEST_POSTS} from '../constants/ActionTypes';
 
-const fetchPosts = reddit => dispatch => {
-    dispatch(requestPosts(reddit))
-    return fetch(`https://www.reddit.com/r/${reddit}.json`)
-        .then(response => response.json())
-        .then(json => dispatch(receivePosts(reddit, json)))
-}
-
-const shouldFetchPosts = (state, reddit) => {
-    const posts = state.postsByReddit[reddit]
-    if (!posts) {
-        return true
-    }
-    if (posts.isFetching) {
-        return false
-    }
-    return posts.didInvalidate
-}
-
-export const fetchPostsIfNeeded = reddit => (dispatch, getState) => {
-    if (shouldFetchPosts(getState(), reddit)) {
-        return dispatch(fetchPosts(reddit))
+function requestPosts() {
+    return {
+        type: REQUEST_POSTS,
     }
 }
+
+export function onError(error) {
+    return {
+        type: ON_ERROR,
+        error,
+    }
+}
+
+export function login(tel, password) {
+    return dispatch => {
+        dispatch(requestPosts());
+        return fetch('/user/loginWithPassword', JSON.stringify({tel, password}), 'POST')
+            .then((res)=> {
+                if (!res.ERROR_CODE) {
+                    window.location.href = '/index.html';
+                }
+                dispatch(onError(res.ERROR_CODE));
+            }).catch((err)=> {
+                dispatch(onError(err));
+            });
+    }
+}
+
+

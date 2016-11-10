@@ -1,13 +1,14 @@
 import React, { Component, PropTypes } from 'react';
-
 import Header from '../common/Header';
 import Users from '../home/Users';
 import Order from './Order';
 import Category from './Category';
 import Goods from './Goods';
 import Customer from './Customer';
-
 import '../../less/detail.less';
+import {getParameterByName} from '../../utils/common';
+import {connect} from 'react-redux';
+import {changeTab, getOrderList, getCategoryList, getGoodsList, getCustomerList} from '../../actions/DetailAction';
 
 const tabs = [
     {key: 'order', value: '订单'},
@@ -16,7 +17,7 @@ const tabs = [
     {key: 'customer', value: '客户'},
 ];
 
-export default class Index extends Component {
+class Index extends Component {
     constructor() {
         super();
         this.state = {
@@ -24,25 +25,16 @@ export default class Index extends Component {
         }
     }
 
-    getParameterByName(name, url) {
-        if (!url) url = window.location.href;
-        name = name.replace(/[\[\]]/g, "\\$&");
-        const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
-        const results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, " "));
-    }
-
     renderNav() {
-        const {tab} = this.state;
+        const {detail, dispatch} = this.props;
+        const {tab} = detail || {};
         return (
             <ul>
                 {
                     tabs.map(({key, value}) => (
                         <li key={key}
                             className={(key === tab) && 'active'}
-                            onClick={() => this.setState({tab: key})}>{value}</li>
+                            onClick={() => dispatch(changeTab(key))}>{value}</li>
                     ))
                 }
             </ul>
@@ -50,29 +42,39 @@ export default class Index extends Component {
     }
 
     render() {
-        const {tab} = this.state;
-        let userId = this.getParameterByName('userId');
+        const {detail, dispatch} = this.props;
+        const {tab} = detail || {};
+        let userId = getParameterByName('userId');
         let childComponent;
         switch (tab) {
             case 'order':
-                childComponent = <Order userId={userId}/>;
+                childComponent = <Order userId={userId}
+                                        detail={detail}
+                                        getOrderList={(start, size, userId) => dispatch(getOrderList(start, size, userId))}/>;
                 break;
             case 'category':
-                childComponent = <Category userId={userId}/>;
+                childComponent = <Category userId={userId}
+                                           detail={detail}
+                                           getCategoryList={(start, size, userId) => dispatch(getCategoryList(start, size, userId))}/>;
                 break;
             case 'goods':
-                childComponent = <Goods userId={userId}/>;
+                childComponent = <Goods userId={userId}
+                                        detail={detail}
+                                        getGoodsList={(start, size, userId) => dispatch(getGoodsList(start, size, userId))}/>;
                 break;
             case 'customer':
-                childComponent = <Customer userId={userId}/>;
+                childComponent = <Customer userId={userId}
+                                           detail={detail}
+                                           getCustomerList={(start, size, userId) => dispatch(getCustomerList(start, size, userId))}/>;
                 break;
             default:
-                childComponent = <Order userId={userId}/>;
+                childComponent = <Order userId={userId}
+                                        detail={detail}
+                                        getOrderList={(start, size, userId) => dispatch(getOrderList(start, size, userId))}/>;
         }
         return (
             <div>
                 <Header title='详细'/>
-
                 <div className='main-body detail'>
                     <div className='nav-bar'>
                         {this.renderNav()}
@@ -85,3 +87,8 @@ export default class Index extends Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {detail: state.detail};
+}
+export default connect(mapStateToProps)(Index);

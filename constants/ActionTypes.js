@@ -1,4 +1,16 @@
 /**
  * Created by nairu on 2016/10/25.
  */
-export const LOGIN = 'LOGIN'
+export const REQUEST_POSTS = 'REQUEST_POSTS';
+export const RECEIVE_POSTS = 'RECEIVE_POSTS';
+export const ON_ERROR  = 'ON_ERROR';
+export const RECEIVE_USER_BY_PHONE = 'RECEIVE_USER_BY_PHONE';
+export const CHANGE_TAB = 'CHANGE_TAB';
+export const MARK_RESOLVE = 'MARK_RESOLVE';
+export const GET_USER_STATISTIC = 'GET_USER_STATISTIC';
+export const GET_ORDER_STATISTIC = 'GET_ORDER_STATISTIC';
+export const GET_EXPRESS_STATISTIC = 'GET_EXPRESS_STATISTIC';
+export const GET_ORDER_LIST = 'GET_ORDER_LIST';
+export const GET_CATEGORY_LIST = 'GET_CATEGORY_LIST';
+export const GET_GOODS_LIST = 'GET_GOODS_LIST';
+export const GET_CUSTOMER_LIST = 'GET_CUSTOMER_LIST';

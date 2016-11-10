@@ -1,8 +1,6 @@
 import React, { PropTypes, Component } from 'react';
-import Avatar from './../common/Avatar';
-import {fetch} from '../../utils/fetch';
-import moment from 'moment';
 import Chart from 'chart.js/src/chart.js'
+import {getChartOption} from '../../utils/chartOption';
 
 const dayMillionSeconds = 24 * 60 * 60 * 1000;
 
@@ -10,9 +8,6 @@ export default class OrderStatistic extends Component {
 
     constructor() {
         super();
-        this.state = {
-
-        }
     }
 
     componentDidMount() {
@@ -20,9 +15,10 @@ export default class OrderStatistic extends Component {
     }
 
     componentDidUpdate() {
-        const {data} = this.state;
-        if (data && data.length > 0) {
-            this.renderChart(data);
+        const {statistic} = this.props;
+        const {orderData} = statistic || {};
+        if (orderData && orderData.length > 0) {
+            this.renderChart(orderData);
         }
     }
 
@@ -34,32 +30,16 @@ export default class OrderStatistic extends Component {
             labels.push(date);
             dataSet.push(count);
         });
+        const option = getChartOption();
         new Chart(ctx, {
             type: 'line',
             data: {
                 labels: labels,
                 datasets: [
                     {
-                        label: "新增订单",
-                        fill: false,
-                        lineTension: 0.1,
-                        backgroundColor: "rgba(75,192,192,0.4)",
-                        borderColor: "rgba(75,192,192,1)",
-                        borderCapStyle: 'butt',
-                        borderDash: [],
-                        borderDashOffset: 0.0,
-                        borderJoinStyle: 'miter',
-                        pointBorderColor: "rgba(75,192,192,1)",
-                        pointBackgroundColor: "#fff",
-                        pointBorderWidth: 1,
-                        pointHoverRadius: 5,
-                        pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                        pointHoverBorderColor: "rgba(220,220,220,1)",
-                        pointHoverBorderWidth: 2,
-                        pointRadius: 1,
-                        pointHitRadius: 10,
+                        ...option,
+                        label: '新增订单',
                         data: dataSet,
-                        spanGaps: false,
                     }
                 ]
             },
@@ -69,42 +49,15 @@ export default class OrderStatistic extends Component {
     getStatistics() {
         const endDate = new Date().getTime();
         const startDate = endDate - 10 * dayMillionSeconds;
-        const data = [];
-        let tmpDate = startDate;
-        while (tmpDate <= endDate) {
-            data.push({
-                date: new moment(tmpDate).format('YYYY-MM-DD'),
-            });
-            tmpDate += dayMillionSeconds;
-        }
-        let url = `/order/statistics?start=${startDate}&end=${endDate}`;
-        this.setState({loading: true});
-        fetch(url)
-            .then((res)=> {
-                const total = res.total;
-                const statistics = res.statistics;
-                for (let i = 0; i< data.length ;i ++) {
-                    const {date} = data[i];
-                    data[i].count = (statistics[date] && statistics[date]) || 0;
-                }
-                this.setState({
-                    loading: false,
-                    total,
-                    data,
-                });
-            }).catch((err)=> {
-                console.log(err);
-                this.setState({
-                    loading: false,
-                });
-            });
+        this.props.getStatistic(startDate, endDate);
     }
 
     render() {
-        const {total} = this.state;
+        const {statistic} = this.props;
+        const {orderTotal} = statistic || {};
         return (
             <div className='user-statistic'>
-                <div className='total'>订单总数：{total || 0}</div>
+                <div className='total'>订单总数：{orderTotal || 0}</div>
                 <div className='canvas-wrapper'>
                     <canvas id='orderChart' style={{width: 600, height: 400}}></canvas>
                 </div>
