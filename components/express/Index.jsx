@@ -15,6 +15,26 @@ export default class Index extends Component {
         }
     }
 
+    componentDidMount() {
+        const id = this.getParameterByName("id");
+        if (id) {
+            this.setState({val: id}, () => this.search());
+            this.search(id);
+        }
+    }
+
+    getParameterByName(name, url) {
+        if (!url) {
+            url = window.location.href;
+        }
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
     onKeyPress(e) {
         const keyNum = e.keyCode || e.which;
         if (keyNum === 13) {
