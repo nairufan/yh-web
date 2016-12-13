@@ -2,33 +2,27 @@
  * Created by nairu on 2016/11/9.
  */
 import { combineReducers } from 'redux';
-import {GET_USER_STATISTIC, GET_ORDER_STATISTIC, GET_EXPRESS_STATISTIC} from '../constants/ActionTypes';
+import {GET_DOCUMENT_STATISTIC, GET_ORDER_STATISTIC} from '../constants/ActionTypes';
 import update from 'react-addons-update';
 import moment from 'moment';
 
 const dayMillionSeconds = 24 * 60 * 60 * 1000;
 const initState = {
-    userTotal: 0,
-    userData: [],
+    documentTotal: 0,
+    documentData: [],
     orderTotal: 0,
     orderData: [],
-    expressTotal: 0,
-    expressData: [],
 };
 function statistic(state = initState, action) {
     switch (action.type) {
-        case GET_USER_STATISTIC:
+        case GET_DOCUMENT_STATISTIC:
             const {total, statistics, startDate, endDate} = action;
-            const userData = fillData(startDate, endDate, statistics);
-            return {...state, userTotal: total, userData};
+            const documentData = fillData(startDate, endDate, statistics);
+            return {...state, documentTotal: total, documentData};
         case GET_ORDER_STATISTIC:
             const {total: orderTotal, statistics: orderStatistics, startDate: orderStartDate, endDate: orderEndDate} = action;
             const orderData = fillData(orderStartDate, orderEndDate, orderStatistics);
             return {...state, orderTotal, orderData};
-        case GET_EXPRESS_STATISTIC:
-            const {total: expressTotal, statistics: expressStatistics, startDate: expressStartDate, endDate: expressEndDate} = action;
-            const expressData = fillData(expressStartDate, expressEndDate, expressStatistics);
-            return {...state, expressTotal, expressData};
         default:
             return state
     }
@@ -36,6 +30,12 @@ function statistic(state = initState, action) {
 
 function fillData(startDate, endDate, statistics) {
     const data = [];
+    const statisticsMap = {};
+    if (statistics) {
+        statistics.forEach(({_id, count}) => {
+            statisticsMap[_id] = count;
+        });
+    }
     let tmpDate = startDate;
     while (tmpDate <= endDate) {
         data.push({
@@ -45,7 +45,7 @@ function fillData(startDate, endDate, statistics) {
     }
     for (let i = 0; i < data.length; i++) {
         const {date} = data[i];
-        data[i].count = (statistics[date] && statistics[date]) || 0;
+        data[i].count = statisticsMap[date] || 0;
     }
     return data;
 }

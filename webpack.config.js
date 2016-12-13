@@ -7,11 +7,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var config = {
     devtool: false,
     entry: {
-        home: './entry/home',
         login: './entry/login',
-        detail: './entry/detail',
-        advice: './entry/advice',
-        express: './entry/express',
         statistic: './entry/statistic',
     },
     output: {
@@ -62,42 +58,14 @@ var config = {
             }
         }),
         new HtmlWebpackPlugin({
-            title: '优绘订单',
-            inject: 'body',
-            template: 'template/default.ejs',
-            filename: '../index.html',
-            chunks: ['home'],
-        }),
-        new HtmlWebpackPlugin({
-            title: '优绘订单',
+            title: '优迹订单',
             inject: 'body',
             template: 'template/default.ejs',
             filename: '../login.html',
             chunks: ['login'],
         }),
         new HtmlWebpackPlugin({
-            title: '优绘订单',
-            inject: 'body',
-            template: 'template/default.ejs',
-            filename: '../advice.html',
-            chunks: ['advice'],
-        }),
-        new HtmlWebpackPlugin({
-            title: '优绘订单',
-            inject: 'body',
-            template: 'template/default.ejs',
-            filename: '../detail.html',
-            chunks: ['detail'],
-        }),
-        new HtmlWebpackPlugin({
-            title: '快递查询',
-            inject: 'body',
-            template: 'template/default.ejs',
-            filename: '../express.html',
-            chunks: ['express'],
-        }),
-        new HtmlWebpackPlugin({
-            title: '快递查询',
+            title: '优迹订单',
             inject: 'body',
             template: 'template/default.ejs',
             filename: '../statistic.html',

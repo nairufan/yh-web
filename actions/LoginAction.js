@@ -20,12 +20,13 @@ export function onError(error) {
 export function login(tel, password) {
     return dispatch => {
         dispatch(requestPosts());
-        return fetch('/user/loginWithPassword', JSON.stringify({tel, password}), 'POST')
+        return fetch('/user/admin-login', JSON.stringify({tel, password}), 'POST')
             .then((res)=> {
-                if (!res.ERROR_CODE) {
-                    window.location.href = '/index.html';
+                if (res.success) {
+                    window.location.href = '/statistic.html';
+                } else {
+                    dispatch(onError(res.msg));
                 }
-                dispatch(onError(res.ERROR_CODE));
             }).catch((err)=> {
                 dispatch(onError(err));
             });

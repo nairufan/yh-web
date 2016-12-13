@@ -1,9 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import Chart from 'chart.js/src/chart.js'
 import {getChartOption} from '../../utils/chartOption';
+
 const dayMillionSeconds = 24 * 60 * 60 * 1000;
 
-export default class Users extends Component {
+export default class DocumentStatistic extends Component {
 
     constructor() {
         super();
@@ -15,14 +16,14 @@ export default class Users extends Component {
 
     componentDidUpdate() {
         const {statistic} = this.props;
-        const {userData} = statistic || {};
-        if (userData && userData.length > 0) {
-            this.renderChart(userData);
+        const {documentData} = statistic || {};
+        if (documentData && documentData.length > 0) {
+            this.renderChart(documentData);
         }
     }
 
     renderChart(data) {
-        var ctx = document.getElementById("userChart");
+        var ctx = document.getElementById("documentChart");
         const labels = [];
         const dataSet = [];
         data.forEach(({date, count}) => {
@@ -37,7 +38,7 @@ export default class Users extends Component {
                 datasets: [
                     {
                         ...option,
-                        label: "新增用户",
+                        label: '新增文档',
                         data: dataSet,
                     }
                 ]
@@ -49,17 +50,16 @@ export default class Users extends Component {
         const endDate = new Date().getTime();
         const startDate = endDate - 10 * dayMillionSeconds;
         this.props.getStatistic(startDate, endDate);
-
     }
 
     render() {
         const {statistic} = this.props;
-        const {userTotal} = statistic || {};
+        const {documentTotal} = statistic || {};
         return (
             <div className='user-statistic'>
-                <div className='total'>用户总数：{userTotal || 0}</div>
+                <div className='total'>文档总数：{documentTotal || 0}</div>
                 <div className='canvas-wrapper'>
-                    <canvas id='userChart' style={{width: 600, height: 400}}></canvas>
+                    <canvas id='documentChart' style={{width: 600, height: 400}}></canvas>
                 </div>
             </div>
         )

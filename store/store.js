@@ -4,17 +4,11 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
-import adviceReducers from '../reducers/adviceReducers';
-import detailReducers from '../reducers/detailReducers';
-import homeReducers from '../reducers/homeReducers';
 import loginReducers from '../reducers/loginReducers';
 import statisticReducers from '../reducers/statisticReducers';
 
 const loggerMiddleware = createLogger();
 const reducerMap = {
-    adviceReducers,
-    detailReducers,
-    homeReducers,
     loginReducers,
     statisticReducers,
 };

@@ -2,12 +2,12 @@
  * Created by nairu on 2016/10/25.
  */
 import {fetch} from '../utils/fetch';
-import {GET_USER_STATISTIC, GET_ORDER_STATISTIC, GET_EXPRESS_STATISTIC} from '../constants/ActionTypes';
+import {GET_DOCUMENT_STATISTIC, GET_ORDER_STATISTIC} from '../constants/ActionTypes';
 
 
-function receiveUserStatistic(total, statistics, startDate, endDate) {
+function receiveDocumentStatistic(total, statistics, startDate, endDate) {
     return {
-        type: GET_USER_STATISTIC,
+        type: GET_DOCUMENT_STATISTIC,
         total,
         statistics,
         startDate,
@@ -25,22 +25,12 @@ function receiveOrderStatistic(total, statistics, startDate, endDate) {
     }
 }
 
-function receiveExpressStatistic(total, statistics, startDate, endDate) {
-    return {
-        type: GET_EXPRESS_STATISTIC,
-        total,
-        statistics,
-        startDate,
-        endDate,
-    }
-}
-
-export function getUserStatistic(startDate, endDate) {
+export function getDocumentStatistic(startDate, endDate) {
     return dispatch => {
-        return fetch(`/user/statistics?start=${startDate}&end=${endDate}`)
+        return fetch('/document/statistics')
             .then((res)=> {
                 const {total, statistics} = res;
-                dispatch(receiveUserStatistic(total, statistics, startDate, endDate));
+                dispatch(receiveDocumentStatistic(total, statistics, startDate, endDate));
             }).catch((err)=> {
                 console.log(err);
             });
@@ -49,7 +39,7 @@ export function getUserStatistic(startDate, endDate) {
 
 export function getOrderStatistic(startDate, endDate) {
     return dispatch => {
-        return fetch(`/order/statistics?start=${startDate}&end=${endDate}`)
+        return fetch('/document/order-statistics')
             .then((res)=> {
                 const {total, statistics} = res;
                 dispatch(receiveOrderStatistic(total, statistics, startDate, endDate));
@@ -58,16 +48,3 @@ export function getOrderStatistic(startDate, endDate) {
             });
     }
 }
-
-export function getExpressStatistic(startDate, endDate) {
-    return dispatch => {
-        return fetch(`/express/statistics?start=${startDate}&end=${endDate}`)
-            .then((res)=> {
-                const {total, statistics} = res;
-                dispatch(receiveExpressStatistic(total, statistics, startDate, endDate));
-            }).catch((err)=> {
-                console.log(err);
-            });
-    }
-}
-
