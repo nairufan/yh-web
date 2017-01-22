@@ -4,7 +4,7 @@ import {getChartOption} from '../../utils/chartOption';
 
 const dayMillionSeconds = 24 * 60 * 60 * 1000;
 
-export default class DocumentStatistic extends Component {
+export default class Statistic extends Component {
 
     constructor() {
         super();
@@ -16,14 +16,15 @@ export default class DocumentStatistic extends Component {
 
     componentDidUpdate() {
         const {statistic} = this.props;
-        const {documentData} = statistic || {};
-        if (documentData && documentData.length > 0) {
-            this.renderChart(documentData);
+        const {data} = statistic || {};
+        if (data && data.length > 0) {
+            this.renderChart(data);
         }
     }
 
     renderChart(data) {
-        var ctx = document.getElementById("documentChart");
+        const {id, label} = this.props;
+        var ctx = document.getElementById(id);
         const labels = [];
         const dataSet = [];
         data.forEach(({date, count}) => {
@@ -38,7 +39,7 @@ export default class DocumentStatistic extends Component {
                 datasets: [
                     {
                         ...option,
-                        label: '新增文档',
+                        label: label,
                         data: dataSet,
                     }
                 ]
@@ -53,13 +54,13 @@ export default class DocumentStatistic extends Component {
     }
 
     render() {
-        const {statistic} = this.props;
-        const {documentTotal} = statistic || {};
+        const {title, statistic, id} = this.props;
+        const {total} = statistic || {};
         return (
             <div className='user-statistic'>
-                <div className='total'>文档总数：{documentTotal || 0}</div>
+                <div className='total'>{title}：{total || 0}</div>
                 <div className='canvas-wrapper'>
-                    <canvas id='documentChart' style={{width: 600, height: 400}}></canvas>
+                    <canvas id={id} style={{width: 600, height: 400}}></canvas>
                 </div>
             </div>
         )

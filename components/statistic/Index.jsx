@@ -2,10 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import {fetch} from '../../utils/fetch';
 import '../../less/statistic.less';
 import Header from '../common/Header';
-import OrderStatistic from './OrderStatistic';
-import DocumentStatistic from './DocumentStatistic';
+import Statistic from './Statistic';
+
 import { connect } from 'react-redux';
-import { getDocumentStatistic, getOrderStatistic } from '../../actions/StatisticAction';
+import { getDocumentStatistic, getOrderStatistic, getTopDocumentStatistic, getTopStatistic } from '../../actions/StatisticAction';
 
 class Index extends Component {
     constructor() {
@@ -18,10 +18,26 @@ class Index extends Component {
             <div>
                 <Header title='统计'/>
                 <div className='main-body'>
-                    <DocumentStatistic statistic={statistic}
-                                      getStatistic={(startDate, endDate) => dispatch(getDocumentStatistic(startDate, endDate))}/>
-                    <OrderStatistic statistic={statistic}
-                                       getStatistic={(startDate, endDate) => dispatch(getOrderStatistic(startDate, endDate))}/>
+                    <Statistic id='document'
+                               label='新增文档'
+                               title='文档总数'
+                               statistic={{total: statistic.documentTotal, data: statistic.documentData}}
+                               getStatistic={(startDate, endDate) => dispatch(getDocumentStatistic(startDate, endDate))}/>
+                    <Statistic id='order'
+                               label='新增订单'
+                               title='订单总数'
+                               statistic={{total: statistic.orderTotal, data: statistic.orderData}}
+                               getStatistic={(startDate, endDate) => dispatch(getOrderStatistic(startDate, endDate))}/>
+                    <Statistic id='topDocument'
+                               label='新增排名文档'
+                               title='排名文档总数'
+                               statistic={{total: statistic.topDcTotal, data: statistic.tdcData}}
+                               getStatistic={(startDate, endDate) => dispatch(getTopDocumentStatistic(startDate, endDate))}/>
+                    <Statistic id='topOrder'
+                               label='新增排名'
+                               title='排名总数'
+                               statistic={{total: statistic.topTotal, data: statistic.tData}}
+                               getStatistic={(startDate, endDate) => dispatch(getTopStatistic(startDate, endDate))}/>
                 </div>
             </div>
         );
