@@ -1,11 +1,13 @@
-
 import AjaxPromise from './AjaxPromise'
 const baseUrl = '/api';
-function fetch(url, data, method) {
+const wxBaseUrl = '/wx/api';
+
+function fetch(url, data, method, isWx) {
+    const base = isWx ? wxBaseUrl : baseUrl;
     if (method === 'POST') {
-        return AjaxPromise.post(baseUrl + url, data);
+        return AjaxPromise.post(base + url, data);
     }
-    return AjaxPromise.get(baseUrl + url, data);
+    return AjaxPromise.get(base + url, data);
 }
 
 function getQueryString(name) {
@@ -19,4 +21,4 @@ function getQueryString(name) {
     }
 }
 
-export { fetch , getQueryString }
+export {fetch, getQueryString}

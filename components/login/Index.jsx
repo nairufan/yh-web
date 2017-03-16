@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import {fetch} from '../../utils/fetch';
 import '../../less/login.less';
 import { connect } from 'react-redux';
 import { login, onError } from '../../actions/LoginAction';

@@ -3,6 +3,7 @@ import React, { PropTypes, Component } from 'react'
 import Avatar from './Avatar';
 const menus = [
     {title: '统计', link: '/statistic.html'},
+    {title: '小程序', link: '/weixin.html'},
 ];
 export default class Header extends Component {
 

@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import {fetch} from '../../utils/fetch';
 import '../../less/statistic.less';
 import Header from '../common/Header';
 import Statistic from './Statistic';

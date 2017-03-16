@@ -9,6 +9,7 @@ var config = {
     entry: {
         login: './entry/login',
         statistic: './entry/statistic',
+        weixin: './entry/weixin',
     },
     output: {
         path: path.resolve(__dirname, 'static/build/'),
@@ -70,6 +71,13 @@ var config = {
             template: 'template/default.ejs',
             filename: '../statistic.html',
             chunks: ['statistic'],
+        }),
+        new HtmlWebpackPlugin({
+            title: '优迹智能',
+            inject: 'body',
+            template: 'template/default.ejs',
+            filename: '../weixin.html',
+            chunks: ['weixin'],
         }),
     ]
 };

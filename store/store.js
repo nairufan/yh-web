@@ -6,11 +6,13 @@ import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 import loginReducers from '../reducers/loginReducers';
 import statisticReducers from '../reducers/statisticReducers';
+import weiXinReducers from '../reducers/weiXinReducers';
 
 const loggerMiddleware = createLogger();
 const reducerMap = {
     loginReducers,
     statisticReducers,
+    weiXinReducers,
 };
 const createStoreWithMiddleware = applyMiddleware(
     thunkMiddleware,

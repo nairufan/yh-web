@@ -3,10 +3,8 @@
  */
 import { combineReducers } from 'redux';
 import {GET_DOCUMENT_STATISTIC, GET_ORDER_STATISTIC, GET_TOP_DOCUMENT_STATISTIC, GET_TOP_STATISTIC} from '../constants/ActionTypes';
-import update from 'react-addons-update';
-import moment from 'moment';
+import {fillData} from '../utils/common';
 
-const dayMillionSeconds = 24 * 60 * 60 * 1000;
 const initState = {
     documentTotal: 0,
     documentData: [],
@@ -38,28 +36,6 @@ function statistic(state = initState, action) {
         default:
             return state
     }
-}
-
-function fillData(startDate, endDate, statistics) {
-    const data = [];
-    const statisticsMap = {};
-    if (statistics) {
-        statistics.forEach(({_id, count}) => {
-            statisticsMap[_id] = count;
-        });
-    }
-    let tmpDate = startDate;
-    while (tmpDate <= endDate) {
-        data.push({
-            date: new moment(tmpDate).format('YYYY-MM-DD'),
-        });
-        tmpDate += dayMillionSeconds;
-    }
-    for (let i = 0; i < data.length; i++) {
-        const {date} = data[i];
-        data[i].count = statisticsMap[date] || 0;
-    }
-    return data;
 }
 
 const rootReducer = combineReducers({
